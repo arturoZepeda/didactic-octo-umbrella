@@ -1,9 +1,15 @@
+
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import Cabecera from './components/Header.vue';
+import Formulario from './components/Formulario.vue';
 </script>
 
 <template>
-  <h1 class="text-6xl text-center text-blue-500 bg-slate-900">Hello Vite + Vue 3 + TailWind!</h1>
+  <div class="container mx-auto mt-20">
+    <Cabecera />
+    <div class="mt-12 md:flex">
+      <Formulario />
+    </div>
+  </div>
 </template>
-
 
