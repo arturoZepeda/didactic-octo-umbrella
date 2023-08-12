@@ -40,13 +40,17 @@ const validar = () => {
     if(Object.values(props).includes('')){
         alerta.mensaje = 'Todos los campos son obligatorios';
         alerta.tipo = 'error';
-        return;
     }else{
         alerta.mensaje = 'Paciente agregado correctamente';
         alerta.tipo = 'exito';
         emit('guardar-paciente');
-        return;
+        
     }
+    setTimeout(() => {
+        alerta.mensaje = '';
+        alerta.tipo = '';
+    }, 3000);
+    return;
 }
 
 </script>

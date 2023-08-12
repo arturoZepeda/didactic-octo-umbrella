@@ -1,12 +1,16 @@
 
 <script setup>
 import { ref,reactive} from 'vue';
-import Cabecera from './component/Cabecera.vue';
+import { uid } from 'uid';
+
+import Cabecera from './components/cabecera.vue';
 import Formulario from './components/Formulario.vue';
+import Paciente from './components/Paciente.vue';
 
 const pacientes = ref([]);
 
 const paciente = reactive({
+    id: null,
     nombre: '',
     propietario: '',
     telefono: '',
@@ -16,7 +20,9 @@ const paciente = reactive({
 });
 
 const guardarPaciente = () => {
-    pacientes.value.push({...paciente});
+    pacientes.value.push({
+      ...paciente, id: uid()
+    });
     paciente.nombre = '';
     paciente.propietario = '';
     paciente.telefono = '';
@@ -43,7 +49,13 @@ const guardarPaciente = () => {
       <div class="md:w-1/2 md:h-screen overflow-y-scroll">
         <h3 class="font-black text-2xl text-center mb-5">Administra tus pacientes</h3>
         <div v-if="pacientes.length>0">
-        
+          <p class="text-center text-gray-500 mb-5">Información de <span class="text-indigo-600 font-bold" >Pacientes</span></p> 
+          <paciente 
+          v-for="paciente in pacientes"
+          :paciente="paciente"
+          >
+
+          </paciente>
         </div>
         <div v-else class="text-center text-gray-500">No hay pacientes agregados</div>
       </div>
