@@ -33,6 +33,10 @@ const props = defineProps({
     sintomas: {
         type: String,
         required: true
+    },
+    id: {
+        type: [String, null],
+        required: false
     }
 })
 
@@ -56,7 +60,7 @@ const validar = () => {
 </script>
 <template>
 <div class="md:w-1/2">
-    <h2 class="font-black text-3xl text-center"> Seguimiento Pacientes</h2>
+    <h2 class="font-black text-5xl text-center"> Seguimiento Pacientes</h2>
     <p class="text-lg mt-5 text-center mb-10">
         Añade pacientes y
         <span class="text-indigo-600 font-bold" >
@@ -152,7 +156,7 @@ const validar = () => {
                 ></textarea>
         </div>
         <input type="submit"
-            value="Agregar Paciente"
+            :value="id ? 'Editar Paciente' : 'Agregar Paciente'"
             class="bg-indigo-500 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-indigo-600 transition-colors">
     </form>
 </div>

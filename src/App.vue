@@ -1,13 +1,20 @@
 
 <script setup>
-import { ref,reactive} from 'vue';
+import { ref,reactive, watch, onMounted} from 'vue';
 import { uid } from 'uid';
 
-import Cabecera from './components/cabecera.vue';
+import Cabecera from './components/Cabecera.vue';
 import Formulario from './components/Formulario.vue';
 import Paciente from './components/Paciente.vue';
 
 const pacientes = ref([]);
+
+onMounted(() => {
+  const pacientesLS = JSON.parse(localStorage.getItem('pacientes'));
+  if (pacientesLS) {
+    pacientes.value = pacientesLS;
+  }
+});
 
 const paciente = reactive({
     id: null,
@@ -19,10 +26,25 @@ const paciente = reactive({
     sintomas: ''
 });
 
+watch(pacientes, () => {
+  guardarLocalStorage();
+}, { deep: true });
+
+const eliminarPaciente =( id ) => {
+  const index = pacientes.value.findIndex(paciente => paciente.id === id);
+  pacientes.value.splice(index, 1);
+}
 const guardarPaciente = () => {
+    if  (paciente.id) {
+      const { id } = paciente;
+      const index = pacientes.value.findIndex(paciente => paciente.id === id);
+      pacientes.value.splice(index, 1, paciente);
+      return;
+    }else{
     pacientes.value.push({
       ...paciente, id: uid()
     });
+    }
     paciente.nombre = '';
     paciente.propietario = '';
     paciente.telefono = '';
@@ -31,6 +53,15 @@ const guardarPaciente = () => {
     paciente.sintomas = '';
 }
 
+const actualizarPaciente = (id) => {
+  const pacienteEditar = pacientes.value.filter(paciente => paciente.id === id)[0];
+  console.log(pacienteEditar);
+  Object.assign(paciente, pacienteEditar);
+}
+
+const guardarLocalStorage = () => {
+  localStorage.setItem('pacientes', JSON.stringify(pacientes.value));
+}
 </script>
 
 <template>
@@ -45,6 +76,7 @@ const guardarPaciente = () => {
         v-model:fecha="paciente.fecha"
         v-model:sintomas="paciente.sintomas"
         @guardar-paciente="guardarPaciente"
+        :id="paciente.id"
       />
       <div class="md:w-1/2 md:h-screen overflow-y-scroll">
         <h3 class="font-black text-2xl text-center mb-5">Administra tus pacientes</h3>
@@ -53,6 +85,8 @@ const guardarPaciente = () => {
           <paciente 
           v-for="paciente in pacientes"
           :paciente="paciente"
+          @actualizar-paciente="actualizarPaciente"
+          @eliminar-paciente="eliminarPaciente"
           >
 
           </paciente>
