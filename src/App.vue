@@ -34,6 +34,7 @@ const eliminarPaciente =( id ) => {
   const index = pacientes.value.findIndex(paciente => paciente.id === id);
   pacientes.value.splice(index, 1);
 }
+
 const guardarPaciente = () => {
     if  (paciente.id) {
       const { id } = paciente;
